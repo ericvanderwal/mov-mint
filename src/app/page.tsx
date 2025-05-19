@@ -147,7 +147,7 @@ export default function Home() {
         <div className="notice-content">
           <h2 className={`${orbitron.className} notice-title`}>Important Notice</h2>
           <p className="notice-text">To mint on Somnia testnet, you'll need to grab some STT tokens to cover your gas.</p>
-          <a href="https://x.com/MasksOfTheVoid/status/1923062705117638726" 
+          <a href="https://testnet.somnia.network/" 
              target="_blank" 
              rel="noopener noreferrer" 
              className="notice-link">
