@@ -11,6 +11,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Masks of the Void: Infinity | Base Backgrounds',
   description: 'Mint your Masks of the Void background NFTs',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({
