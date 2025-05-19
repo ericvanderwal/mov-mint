@@ -131,7 +131,7 @@ export default function Home() {
         <div className="nav-container">
           <div className="nav-logo">
             <Image
-              src="/T_Logo_MOV_Infinity_black (1).png"
+              src="/logo.png"
               alt="MOV Logo"
               width={200}
               height={50}
