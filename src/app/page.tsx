@@ -15,34 +15,24 @@ export default function Home() {
   // Track individual token balances
   const [tokenBalances, setTokenBalances] = useState<number[]>([0, 0, 0]);
 
-  // Function to randomly select token based on rarity and availability
+  // Function to randomly select token based on rarity probabilities
   const getRandomToken = useCallback(() => {
-    // Check which tokens are still available to mint
-    const available = [
-      tokenBalances[0] < 3, // Common: max 3
-      tokenBalances[1] < 2, // Rare: max 2
-      tokenBalances[2] < 1  // Epic: max 1
-    ];
-
-    // If no tokens are available, throw error
-    if (!available.some(Boolean)) {
-      throw new Error("You've reached the maximum mint limit for all available backgrounds");
+    // Check if total minted has reached wallet limit
+    if (totalMinted >= 5) {
+      throw new Error("You've reached the maximum mint limit of 5 NFTs");
     }
 
-    // Adjust probabilities based on availability
+    // Generate random number for probability check
     const random = Math.random() * 100;
     
-    // Try to mint Epic (15% chance)
-    if (random < 15 && available[2]) return 2;
+    // 15% chance for Epic (Void)
+    if (random < 15) return 2;
     
-    // Try to mint Rare (35% chance)
-    if (random < 50 && available[1]) return 1;
+    // 35% chance for Rare (Boreal)
+    if (random < 50) return 1;
     
-    // Try to mint Common (50% chance)
-    if (available[0]) return 0;
-    
-    // If preferred token is unavailable, fall back to any available token
-    return available.findIndex(Boolean);
+    // 50% chance for Common (Sunset)
+    return 0;
   }, [tokenBalances]);
 
   const address = useAddress();
@@ -54,6 +44,44 @@ export default function Home() {
   const [error, setError] = useState("");
   const [mintedTokenId, setMintedTokenId] = useState<number | null>(null);
   const [totalMinted, setTotalMinted] = useState(0);
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [showCountdown, setShowCountdown] = useState(true);
+
+  // Countdown timer
+  useEffect(() => {
+    const targetDate = new Date('2025-05-22T15:00:00-04:00'); // May 22nd, 2025, 3:00 PM EST
+
+    const calculateTimeLeft = () => {
+      const currentTime = new Date();
+      const difference = targetDate.getTime() - currentTime.getTime();
+      
+      console.log('Current Time:', currentTime.toString());
+      console.log('Target Date:', targetDate.toString());
+      console.log('Time Difference (ms):', difference);
+      
+      if (difference > 0) {
+        return {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        };
+      }
+      
+      setShowCountdown(false);
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    };
+
+    const result = calculateTimeLeft();
+    console.log('Countdown Values:', result);
+    setTimeLeft(result);
+
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Track mints for each token type
   useEffect(() => {
@@ -71,17 +99,9 @@ export default function Home() {
         const total = balances.reduce((a, b) => a + b, 0);
         setTotalMinted(total);
 
-        // Check individual token limits
-        const atLimit = [
-          balances[0] >= 3, // Common limit
-          balances[1] >= 2, // Rare limit
-          balances[2] >= 1  // Epic limit
-        ];
-
-        if (atLimit.every(Boolean)) {
-          setError("You've reached the maximum mint limit for all backgrounds");
-        } else if (total >= 5) {
-          setError("You've reached the total mint limit of 5 NFTs");
+        // Only check total wallet limit
+        if (total >= 5) {
+          setError("You've reached the maximum mint limit of 5 NFTs");
         }
       } catch (err) {
         console.error("Error checking balances:", err);
@@ -120,7 +140,7 @@ export default function Home() {
       <div className="hero"> 
         <h1 className={`${orbitron.className}`} data-text="Masks of the Void: Infinity">Masks of the Void: Infinity</h1>
         <h1 className={`${orbitron.className} collection`} data-text="Base Backgrounds">Base Backgrounds</h1>
-      </div> 
+      </div>
 
       {/* STT Token Notice */}
       <section className="notice-section">
@@ -135,6 +155,33 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      {showCountdown && (
+        <div className="countdown card" style={{ padding: '0rem' }}>
+          {/* Countdown Timer */}
+          <section className="countdown-section" style={{ margin: '0rem' }}>
+            <h3 className={`${orbitron.className} section-title`} style={{ fontSize: '24px', marginBottom: '0rem' }}>Mint Opens In</h3>
+            <div className="countdown-timer" style={{ margin: '0rem' }}>
+              <div className="countdown-item">
+                <span className="countdown-value">{timeLeft.days}</span>
+                <span className="countdown-label" style={{ margin: '0rem' }}>Days</span>
+              </div>
+              <div className="countdown-item">
+                <span className="countdown-value">{timeLeft.hours}</span>
+                <span className="countdown-label" style={{ margin: '0rem' }}>Hours</span>
+              </div>
+              <div className="countdown-item">
+                <span className="countdown-value">{timeLeft.minutes}</span>
+                <span className="countdown-label" style={{ margin: '0rem' }}>Minutes</span>
+              </div>
+              <div className="countdown-item">
+                <span className="countdown-value">{timeLeft.seconds}</span>
+                <span className="countdown-label" style={{ margin: '0rem' }}>Seconds</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
 
       {/* Main Card */}
       <div className="card">
@@ -174,22 +221,33 @@ export default function Home() {
                       throw new Error(`You can only mint up to 5 NFTs in total. You have minted ${totalMinted} so far.`);
                     }
 
-                    // Try to get a random token that's still available
-                    const tokenId = getRandomToken();
-                    
-                    // Check if this mint would exceed the token's individual limit
-                    const limits = [3, 2, 1]; // Common, Rare, Epic limits
-                    if (tokenBalances[tokenId] + quantity > limits[tokenId]) {
-                      throw new Error(`You can only mint up to ${limits[tokenId]} of this background type. You have ${tokenBalances[tokenId]}.`);
+                    // Generate token IDs for each NFT being minted
+                    const tokenIds = Array.from({ length: quantity }, () => {
+                      const random = Math.random() * 100;
+                      // 15% chance for Epic (Void)
+                      if (random < 15) return 2;
+                      // 35% chance for Rare (Boreal)
+                      if (random < 50) return 1;
+                      // 50% chance for Common (Sunset)
+                      return 0;
+                    });
+
+                    console.log('Minting token IDs:', tokenIds);
+
+                    // No individual token limits, only check total wallet limit
+                    if (totalMinted + quantity > 5) {
+                      throw new Error(`You can only mint up to 5 NFTs in total. You have minted ${totalMinted} so far.`);
                     }
 
-                    // Use Edition Drop claim method
-                    const tx = await contract.erc1155.claim(
-                      tokenId,
-                      quantity
+                    // Mint each token individually to maintain proper probabilities
+                    const txPromises = tokenIds.map(tokenId =>
+                      contract.erc1155.claim(tokenId, 1)
                     );
-                    setMintedTokenId(tokenId);
-                    console.log("Successfully minted NFT", tx);
+                    
+                    const txs = await Promise.all(txPromises);
+                    // Show the last minted token's type in the success message
+                    setMintedTokenId(tokenIds[tokenIds.length - 1]);
+                    console.log("Successfully minted NFTs", txs);
                   } catch (err: any) {
                     console.error("Failed to mint NFT", err);
                     setError(err?.message || "Failed to mint NFT");
@@ -206,18 +264,15 @@ export default function Home() {
               {error && (
                 <Dialog open={!!error} onOpenChange={() => setError("")}>  
                   <DialogContent>
-                    <DialogTitle>Error</DialogTitle>
+                    <DialogTitle>
+                      {error.includes("maximum") ? "Minting Complete" : "Error"}
+                    </DialogTitle>
                     <DialogDescription>
-                  {error}
-                  {mintedTokenId !== null && (
-                    <p className="mt-4">
-                      Congratulations! You received the {' '}
-                      {mintedTokenId === 2 ? 'Epic Void' :
-                       mintedTokenId === 1 ? 'Rare Boreal' :
-                       'Common Sunset'} Background!
-                    </p>
-                  )}
-                </DialogDescription>
+                      {error.includes("maximum") ? 
+                        `Congratulations, you minted ${totalMinted} backgrounds!` : 
+                        error
+                      }
+                    </DialogDescription>
                   </DialogContent>
                 </Dialog>
               )}
