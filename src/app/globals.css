@@ -555,18 +555,21 @@ body::after {
 
 .countdown-timer {
   display: flex;
-  gap: 2rem;
+  gap: clamp(1rem, 4vw, 2rem);
   margin: 1rem 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .countdown-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 60px;
 }
 
 .countdown-value {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: bold;
   color: var(--accent-gold);
 }
@@ -721,13 +724,21 @@ body::after {
 }
 
 .game-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   align-items: center;
-  margin: 1rem 0rem 0rem 0rem;
-  padding: 0rem 0rem;
-  width: 105%;
+  margin: 1rem 0;
+  padding: 0;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .game-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
 }
 
 .perks-section {
@@ -763,16 +774,25 @@ body::after {
 
 .yt-embed {
   width: 100%;
+  aspect-ratio: 16/9;
+  height: auto;
 }
 
 .perks-media {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-    height: 100%;
+  height: 100%;
   min-height: 250px;
   overflow: hidden;
-  gap: 5rem;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .perks-media {
+    flex-direction: row;
+    gap: 2rem;
+  }
 }
 
 .game-media img,

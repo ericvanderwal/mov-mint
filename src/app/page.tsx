@@ -334,7 +334,7 @@ export default function Home() {
       {/* Game Description Section */}
       <section className="game-section">
         <div className="game-content">
-          <h3 className={`${orbitron.className} section-title`} style={{ fontSize: '2.5rem' }}>Masks of the Void: Infinity</h3>
+          <h3 className={`${orbitron.className} section-title`} style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)' }}>Masks of the Void: Infinity</h3>
           <p className="section-text">
           Masks of the Void: Infinity is a F2P wave-based roguelite showcasing fast-paced combat and competitive progression. 
           </p>
