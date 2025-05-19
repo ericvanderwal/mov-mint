@@ -99,10 +99,8 @@ export default function Home() {
         const total = balances.reduce((a, b) => a + b, 0);
         setTotalMinted(total);
 
-        // Only check total wallet limit
-        if (total >= 5) {
-          setError("You've reached the maximum mint limit of 5 NFTs");
-        }
+        // Update total minted count
+        setTotalMinted(total);
       } catch (err) {
         console.error("Error checking balances:", err);
       }
@@ -221,6 +219,16 @@ export default function Home() {
                       throw new Error(`You can only mint up to 5 NFTs in total. You have minted ${totalMinted} so far.`);
                     }
 
+                    // Check total wallet limit before generating tokens
+                    if (totalMinted + quantity > 5) {
+                      const remaining = 5 - totalMinted;
+                      if (remaining <= 0) {
+                        throw new Error(`You've reached the maximum mint limit of 5 NFTs`);
+                      } else {
+                        throw new Error(`You can only mint ${remaining} more NFT${remaining === 1 ? '' : 's'}. You have minted ${totalMinted} so far.`);
+                      }
+                    }
+
                     // Generate token IDs for each NFT being minted
                     const tokenIds = Array.from({ length: quantity }, () => {
                       const random = Math.random() * 100;
@@ -233,11 +241,6 @@ export default function Home() {
                     });
 
                     console.log('Minting token IDs:', tokenIds);
-
-                    // No individual token limits, only check total wallet limit
-                    if (totalMinted + quantity > 5) {
-                      throw new Error(`You can only mint up to 5 NFTs in total. You have minted ${totalMinted} so far.`);
-                    }
 
                     // Mint each token individually to maintain proper probabilities
                     const txPromises = tokenIds.map(tokenId =>
