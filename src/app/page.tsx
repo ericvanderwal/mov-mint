@@ -55,10 +55,6 @@ export default function Home() {
       const currentTime = new Date();
       const difference = targetDate.getTime() - currentTime.getTime();
       
-      console.log('Current Time:', currentTime.toString());
-      console.log('Target Date:', targetDate.toString());
-      console.log('Time Difference (ms):', difference);
-      
       if (difference > 0) {
         return {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -73,7 +69,6 @@ export default function Home() {
     };
 
     const result = calculateTimeLeft();
-    console.log('Countdown Values:', result);
     setTimeLeft(result);
 
     const timer = setInterval(() => {
@@ -83,56 +78,47 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // Track mints using contract events
+  // Track mints using direct balance checks
   useEffect(() => {
     if (!contract || !address) return;
 
     const updateBalances = async () => {
       try {
-        // Get all TransferSingle events for this address
-        const events = await contract.events.getEvents("TransferSingle", {
-          filters: {
-            to: address
-          },
-          fromBlock: 0
-        });
+        // Get balances for all three token types
+        const [token0, token1, token2] = await Promise.all([
+          contract.erc1155.balanceOf(address, 0),
+          contract.erc1155.balanceOf(address, 1),
+          contract.erc1155.balanceOf(address, 2)
+        ]);
 
-        // Calculate total minted from events
-        let total = 0;
-        const balances = [0, 0, 0];
+        const balances = [
+          Number(token0),
+          Number(token1),
+          Number(token2)
+        ];
 
-        events.forEach(event => {
-          const { id, value } = event.data;
-          const tokenId = Number(id);
-          if (tokenId >= 0 && tokenId <= 2) {
-            balances[tokenId] += Number(value);
-            total += Number(value);
-          }
-        });
-
-        console.log('Events found:', events.length);
-        console.log('Token balances:', balances);
-        console.log('Total minted:', total);
-
+        const total = balances.reduce((a, b) => a + b, 0);
         setTokenBalances(balances);
         setTotalMinted(total);
+        
+        // Only log when wallet is connected
+        if (address && connectionStatus === "connected") {
+          console.log('Current balances:', balances);
+          console.log('Total minted:', total);
+        }
       } catch (err) {
-        console.error("Error fetching events:", err);
+        console.error("Error checking balances:", err);
       }
     };
 
     // Initial balance check
     updateBalances();
 
-    // Listen for new transfer events
-    const unsubscribe = contract.events.addEventListener("TransferSingle", (event) => {
-      if (event.data.to === address) {
-        updateBalances();
-      }
-    });
+    // Set up interval to check balances periodically
+    const interval = setInterval(updateBalances, 5000); // Check every 5 seconds
 
     return () => {
-      unsubscribe();
+      clearInterval(interval);
     };
   }, [contract, address]);
 
