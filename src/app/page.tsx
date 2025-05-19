@@ -304,6 +304,33 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Minted Backgrounds Section */}
+      {address && totalMinted > 0 && (
+        <section className="minted-section">
+          <h2 className={`${orbitron.className} section-title`} style={{ fontSize: '24px' }}>Your Collection</h2>
+          <div className="minted-grid">
+            {tokenBalances[0] > 0 && Array(tokenBalances[0]).fill(0).map((_, i) => (
+              <div key={`sunset-${i}`} className="minted-item">
+                <Image src="/sunset.png" alt="Sunset Background" width={200} height={100} className="minted-image" />
+                <p className="minted-label">Common Sunset</p>
+              </div>
+            ))}
+            {tokenBalances[1] > 0 && Array(tokenBalances[1]).fill(0).map((_, i) => (
+              <div key={`boreal-${i}`} className="minted-item">
+                <Image src="/boreal.png" alt="Boreal Background" width={200} height={100} className="minted-image" />
+                <p className="minted-label">Rare Boreal</p>
+              </div>
+            ))}
+            {tokenBalances[2] > 0 && Array(tokenBalances[2]).fill(0).map((_, i) => (
+              <div key={`void-${i}`} className="minted-item">
+                <Image src="/void.png" alt="Void Background" width={200} height={100} className="minted-image" />
+                <p className="minted-label">Epic Void</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Game Description Section */}
       <section className="game-section">
         <div className="game-content">
