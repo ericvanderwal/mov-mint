@@ -260,14 +260,19 @@ export default function Home() {
                     const txPromises = tokenIds.map(tokenId =>
                       contract.erc1155.claim(tokenId, 1)
                     );
-                    
+
                     const txs = await Promise.all(txPromises);
                     // Show the last minted token's type in the success message
                     setMintedTokenId(tokenIds[tokenIds.length - 1]);
                     console.log("Successfully minted NFTs", txs);
                   } catch (err: any) {
                     console.error("Failed to mint NFT", err);
-                    setError(err?.message || "Failed to mint NFT");
+                    // Check for inactive claim condition
+                    if (err.message?.includes("DropNoActiveCondition") || err.message?.includes("getActiveClaimConditionId")) {
+                      setError("Minting has not started yet");
+                    } else {
+                      setError(err?.message || "Failed to mint NFT");
+                    }
                     throw err; // This ensures the error shows in the Web3Button
                   } finally {
                     setIsMinting(false);
