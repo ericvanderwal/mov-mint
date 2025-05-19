@@ -1,0 +1,19 @@
+{
+  "name": "Void Walker Pass - Void Edition",
+  "description": "A Void Walker Pass with the epic Void background. Grants exclusive access to the Void Walker community and premium in-game perks.",
+  "image": "ipfs://{placeholder}/T_MoVI_BG_Void.png",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Void"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Edition",
+      "value": "Genesis"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Boreal Void Walker Pass",
+  "description": "A Void Walker Pass with the rare Boreal background. Grants enhanced access to the Void Walker community and special in-game perks.",
+  "image": "ipfs://{placeholder}/T_MoVI_BG_Boreal.png",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Boreal"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Edition",
+      "value": "Genesis"
+    }
+  ]
+}

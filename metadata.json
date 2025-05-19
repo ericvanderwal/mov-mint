@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Sunset Background",
+    "description": "A common background for Masks of the Void. The setting sun casts long shadows across the realm.",
+    "image": "0.png",
+    "attributes": [
+      {
+        "trait_type": "Collection",
+        "value": "MoV Base Collectibles"
+      },
+      {
+        "trait_type": "Type",
+        "value": "Background"
+      },
+      {
+        "trait_type": "Rarity",
+        "value": "Common"
+      }
+    ]
+  },
+  {
+    "name": "Boreal Background",
+    "description": "A rare background for Masks of the Void. The mystical northern lights dance in the void.",
+    "image": "1.png",
+    "attributes": [
+      {
+        "trait_type": "Collection",
+        "value": "MoV Base Collectibles"
+      },
+      {
+        "trait_type": "Type",
+        "value": "Background"
+      },
+      {
+        "trait_type": "Rarity",
+        "value": "Rare"
+      }
+    ]
+  },
+  {
+    "name": "Void Background",
+    "description": "An epic background for Masks of the Void. The pure essence of the void itself.",
+    "image": "2.png",
+    "attributes": [
+      {
+        "trait_type": "Collection",
+        "value": "MoV Base Collectibles"
+      },
+      {
+        "trait_type": "Type",
+        "value": "Background"
+      },
+      {
+        "trait_type": "Rarity",
+        "value": "Epic"
+      }
+    ]
+  }
+]

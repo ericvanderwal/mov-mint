@@ -1,0 +1,5 @@
+{
+  "chain": "somnia",
+  "network": "testnet",
+  "rpc": ["https://somnia.rpc.thirdweb.com"]
+}
