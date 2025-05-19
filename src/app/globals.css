@@ -555,7 +555,7 @@ body::after {
 
 .countdown-timer {
   display: flex;
-  gap: clamp(1rem, 4vw, 2rem);
+  gap: clamp(0.5rem, 2vw, 2rem);
   margin: 1rem 0;
   flex-wrap: wrap;
   justify-content: center;
@@ -565,20 +565,20 @@ body::after {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 60px;
+  min-width: 45px;
 }
 
 .countdown-value {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
   font-weight: bold;
   color: var(--accent-gold);
 }
 
 .countdown-label {
-  font-size: 0.875rem;
+  font-size: clamp(0.7rem, 2vw, 0.875rem);
   color: var(--text-color);
   text-transform: uppercase;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .notice-section {
