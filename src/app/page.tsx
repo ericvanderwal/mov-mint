@@ -83,30 +83,58 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // Track mints for each token type
+  // Track mints using contract events
   useEffect(() => {
-    const checkBalances = async () => {
-      if (!contract || !address) return;
-      try {
-        const [token0, token1, token2] = await Promise.all([
-          contract.erc1155.balanceOf(address, 0),
-          contract.erc1155.balanceOf(address, 1),
-          contract.erc1155.balanceOf(address, 2)
-        ]);
-        
-        const balances = [Number(token0), Number(token1), Number(token2)];
-        setTokenBalances(balances);
-        const total = balances.reduce((a, b) => a + b, 0);
-        setTotalMinted(total);
+    if (!contract || !address) return;
 
-        // Update total minted count
+    const updateBalances = async () => {
+      try {
+        // Get all TransferSingle events for this address
+        const events = await contract.events.getEvents("TransferSingle", {
+          filters: {
+            to: address
+          },
+          fromBlock: 0
+        });
+
+        // Calculate total minted from events
+        let total = 0;
+        const balances = [0, 0, 0];
+
+        events.forEach(event => {
+          const { id, value } = event.data;
+          const tokenId = Number(id);
+          if (tokenId >= 0 && tokenId <= 2) {
+            balances[tokenId] += Number(value);
+            total += Number(value);
+          }
+        });
+
+        console.log('Events found:', events.length);
+        console.log('Token balances:', balances);
+        console.log('Total minted:', total);
+
+        setTokenBalances(balances);
         setTotalMinted(total);
       } catch (err) {
-        console.error("Error checking balances:", err);
+        console.error("Error fetching events:", err);
       }
     };
-    checkBalances();
-  }, [contract, address, isMinting]);
+
+    // Initial balance check
+    updateBalances();
+
+    // Listen for new transfer events
+    const unsubscribe = contract.events.addEventListener("TransferSingle", (event) => {
+      if (event.data.to === address) {
+        updateBalances();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [contract, address]);
 
 
   return (
