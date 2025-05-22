@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "npx --no vercel next-on-pages",
+    "postbuild": "npx --yes next-on-pages --experimental-minimal",
     "deploy": "wrangler pages deploy .output/public --project-name=infinity-mint"
   },
   "dependencies": {
