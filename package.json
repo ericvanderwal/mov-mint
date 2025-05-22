@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "deploy": "wrangler pages deploy out --project-name=infinity-mint"
+    "deploy": "wrangler pages deploy ./out --project-name=infinity-mint"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
