@@ -49,7 +49,7 @@ export default function Home() {
 
   // Countdown timer
   useEffect(() => {
-    const targetDate = new Date('2025-05-22T15:00:00-04:00'); // May 22nd, 2025, 3:00 PM EST
+    const targetDate = new Date('2025-05-22T9:00:00-04:00'); // May 22nd, 2025, 3:00 PM EST
 
     const calculateTimeLeft = () => {
       const currentTime = new Date();
