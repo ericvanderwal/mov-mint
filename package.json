@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node build-worker.js",
     "start": "next start",
     "lint": "next lint",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.0",
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-dialog": "^1.1.13",
     "@radix-ui/react-slot": "^1.2.2",

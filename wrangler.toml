@@ -9,4 +9,4 @@ command = "npm run build"
 bucket = "./out"
 
 # Specify the entry point for the worker
-main = "_worker.js"
+main = "workers-site/index.js"
