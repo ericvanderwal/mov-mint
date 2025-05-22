@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "postbuild": "npx next-on-pages --skip-build",
-    "deploy": "wrangler pages deploy .output/public --project-name=infinity-mint"
+    "build": "next build && next export",
+    "deploy": "wrangler pages deploy out --project-name=infinity-mint"
   },
+
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-dialog": "^1.1.13",
