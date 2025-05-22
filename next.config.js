@@ -1,20 +1,13 @@
 /** @type {import('next').NextConfig} */
-const config = {
+const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone', // Required for Cloudflare Pages with next-on-pages
   images: {
-    unoptimized: true, // Avoid using Image Optimization on Pages (unless using R2 or custom loader)
+    unoptimized: true,
   },
+  output: 'standalone', // REQUIRED for next-on-pages
   experimental: {
-  },
-  webpack: (config) => {
-    config.resolve.fallback = {
-      fs: false,
-      net: false,
-      tls: false,
-    };
-    return config;
+    outputFileTracingRoot: './',
   },
 };
 
-module.exports = config;
+module.exports = nextConfig;
