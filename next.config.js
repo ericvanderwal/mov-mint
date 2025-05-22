@@ -6,7 +6,6 @@ const config = {
     unoptimized: true, // Avoid using Image Optimization on Pages (unless using R2 or custom loader)
   },
   experimental: {
-    appDir: true, // Enable App Router if you're using it
   },
   webpack: (config) => {
     config.resolve.fallback = {
