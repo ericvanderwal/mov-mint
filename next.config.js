@@ -1,13 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   reactStrictMode: true,
-  images: {
-    unoptimized: true,
-  },
-  output: 'standalone', // REQUIRED for next-on-pages
-  experimental: {
-    outputFileTracingRoot: './',
-  },
+  images: { unoptimized: true },
+  output: 'standalone',
 };
 
-module.exports = nextConfig;
+module.exports = config;
